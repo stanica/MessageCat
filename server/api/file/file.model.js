@@ -4,11 +4,11 @@ import mongoose from 'mongoose';
 import {registerEvents} from './file.events';
 
 var FileSchema = new mongoose.Schema({
-  chipId: Number,
+  espIdac: Number,
   folder: String,
   fileName: String,
-  boot: Boolean,
-  active: Boolean
+  boot: { type: Boolean, default: 0 },
+  active: { type: Boolean, default: true }
 });
 
 registerEvents(FileSchema);

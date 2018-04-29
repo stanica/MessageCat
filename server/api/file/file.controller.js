@@ -12,6 +12,9 @@
 
 import { applyPatch } from 'fast-json-patch';
 import File from './file.model';
+import Esp from '../esp/esp.model';
+const fs = require('fs');
+const path = require('path');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -74,6 +77,71 @@ export function show(req, res) {
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
+}
+
+// Gets a list of files for a chip id
+export function list(req, res) {
+  return Esp.findOne({'chipId':req.params.id}).exec()
+    .then(handleEntityNotFound(res))
+    .then(esp => {
+      return File.find({espId:esp.id}).sort({boot:-1}).exec(function(err, files){
+        if(!files) {
+         return res.status(404).end();
+        }
+        var result = '';
+        for(var x=0; x<files.length; x++){
+          if(x !== files.length-1){
+            result += files[x].fileName + '\n';
+          }
+          else {
+            result += files[x].fileName;
+          }
+        }
+        result = result.trim();
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+        res.write(result);
+        res.end();
+        //respondWithResult(res, 200)(result);
+      });
+    })
+    .catch(handleError(res));
+}
+
+// Gets file content for a single file
+export function getFile(req, res) {
+  fs.readFile(path.resolve('server/uploads/') + '/' + req.params.id + '/' + req.params.file, "utf8", function(err, data){
+    if(!err){
+      res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+      res.write(data);
+      res.end();
+      //return respondWithResult(res, 200)(data);
+    }
+    else {
+      return handleError(res)(err);
+    }
+  });
+}
+
+// Gets update status for ESP board
+export function getUpdate(req, res) {
+  return Esp.findOne({'chipId':req.params.id}).exec()
+    .then(handleEntityNotFound(res))
+    .then((esp, err) => {
+      if(err){
+        return handleError(res)(err);
+      }
+      res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+      if(esp.update === 1){
+        res.write('UPDATE');
+        esp.update = 0;
+      }
+      else {
+        res.write('');
+      }
+      res.end();
+      esp.heartbeat = Date.now();
+      esp.save();
+    });
 }
 
 // Creates a new File in the DB
