@@ -15,12 +15,12 @@ export class AuthGuard {
     }
 
     canActivate() {
-    	if (this.authService.isLoggedInSync()) {
-			return true;
-		}
-		else {
-			this.router.navigate(['/login']	);
-			return false;
-		}
+        if(localStorage.getItem('user')) {
+            return true;
+        }
+        else {
+            this.router.navigate(['/login'] );
+            return false;
+        }
 	}
 }

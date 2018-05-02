@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import backstretch from 'jquery-backstretch';
 
 @Component({
     selector: 'main',
@@ -17,6 +18,8 @@ export class MainComponent {
     static parameters = [Http];
     constructor(http) {
         this.Http = http;
+        //TODO: Find a way to make this happen automatically
+        $.backstretch('destroy');
     }
 
     ngOnInit() {

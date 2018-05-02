@@ -46,4 +46,19 @@ export class LoginComponent {
                 this.errors.login = err.json().message;
             });
     }
+
+    modal(state){
+        if(state === 1){
+            setTimeout(function(){
+                $("#myModal").addClass("in");
+            }, 100);
+            $("#myModal").css("display","block");
+        }
+        else {
+            $("#myModal").removeClass("in");
+            setTimeout(function(){
+                $("#myModal").css("display","none");
+            }, 100)
+        }
+    }
 }

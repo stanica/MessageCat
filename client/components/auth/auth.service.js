@@ -33,6 +33,7 @@ export class AuthService {
             this.UserService.get().toPromise()
                 .then(user => {
                     this.currentUser = user;
+                    this.currentUserChanged.emit(user);
                 })
                 .catch(err => {
                     console.log(err);
