@@ -26,7 +26,7 @@ export class LoginComponent {
     constructor(_AuthService_, router) {
         this.AuthService = _AuthService_;
         this.Router = router;
-        $.backstretch("http://makernight.io/wp-content/uploads/2018/02/raspberry-pi-computer-linux-163073.jpeg", {transitionDuration: 500});
+        $.backstretch("../../assets/images/login.jpg", {transitionDuration: 500});
     }
 
     login(form) {

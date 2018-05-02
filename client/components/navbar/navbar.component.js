@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { DataService } from '../data/data.service';
 
 @Component({
     selector: 'navbar',
@@ -17,10 +18,14 @@ export class NavbarComponent {
     isLoggedIn;
     currentUser = {};
     AuthService;
+    DataService;
+    state = false;
 
-    static parameters = [AuthService, Router];
-    constructor(authService, router) {
+    static parameters = [AuthService, Router, DataService];
+    constructor(authService, router, dataService) {
         this.AuthService = authService;
+
+        this.DataService = dataService;
 
         this.Router = router;
 
@@ -49,5 +54,10 @@ export class NavbarComponent {
             this.Router.navigateByUrl('/login');
             this.reset();
         });
+    }
+
+    toggle(){
+        this.state = !this.state;
+        this.DataService.changeCollapse(this.state);
     }
 }

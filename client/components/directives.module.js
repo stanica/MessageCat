@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { AuthModule } from './auth/auth.module';
+import { DataModule } from './data/data.module';
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
@@ -15,7 +16,7 @@ import { OauthButtonsComponent } from './oauth-buttons/oauth-buttons.component';
     imports: [
         CommonModule,
         AuthModule,
-
+        DataModule,
         RouterModule,
     ],
     declarations: [

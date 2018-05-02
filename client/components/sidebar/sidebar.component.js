@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { DataService } from '../data/data.service';
 
 @Component({
     selector: 'sidebar',
@@ -10,14 +10,22 @@ import { AuthService } from '../auth/auth.service';
 export class SidebarComponent {
     isCollapsed = true;
     Router;
-    isLoggedIn;
 
-    static parameters = [AuthService, Router];
-    constructor(authService, router) {
+    static parameters = [Router, DataService];
+    constructor(router, dataService) {
         this.Router = router;
 
-        authService.isLoggedIn().then(is => {
-            this.isLoggedIn = is;
+        dataService.currentState.subscribe(collapse => {
+            if(!collapse){
+                $('#sidebar').css('margin-left', '0');
+                $('#main-content').css('margin-left', '210px');
+                $('#nav-accordion').css('display', 'block');
+            }
+            else {
+                $('#sidebar').css('margin-left', '-210px');
+                $('#main-content').css('margin-left', '0');
+                $('#nav-accordion').css('display', 'none');
+            }
         });
     }
 
