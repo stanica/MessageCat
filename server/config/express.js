@@ -66,14 +66,14 @@ export default function(app) {
      */
     if(env !== 'test' && env !== 'development' && !process.env.SAUCE_USERNAME) { // eslint-disable-line no-process-env
         app.use(lusca({
-            csrf: true,
+            csrf: false,
             xframe: 'SAMEORIGIN',
             hsts: {
                 maxAge: 31536000, //1 year, in seconds
                 includeSubDomains: true,
                 preload: true
             },
-            xssProtection: true
+            xssProtection: false
         }));
     }
 

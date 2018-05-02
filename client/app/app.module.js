@@ -63,7 +63,7 @@ const appRoutes = [{ path: '',
         BrowserModule,
         HttpModule,
 
-        RouterModule.forRoot(appRoutes, { enableTracing: process.env.NODE_ENV === 'development' }),
+        RouterModule.forRoot(appRoutes, { enableTracing: /*process.env.NODE_ENV === 'development'*/ false }),
         MainModule,
         DirectivesModule,
         AccountModule,

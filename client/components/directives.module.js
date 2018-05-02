@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AuthModule } from './auth/auth.module';
 
 import { NavbarComponent } from './navbar/navbar.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 import { FooterComponent } from './footer/footer.component';
 import { OauthButtonsComponent } from './oauth-buttons/oauth-buttons.component';
 
@@ -19,11 +20,13 @@ import { OauthButtonsComponent } from './oauth-buttons/oauth-buttons.component';
     ],
     declarations: [
         NavbarComponent,
+        SidebarComponent,
         FooterComponent,
         OauthButtonsComponent,
     ],
     exports: [
         NavbarComponent,
+        SidebarComponent,
         FooterComponent,
         OauthButtonsComponent,
     ]

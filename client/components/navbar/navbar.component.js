@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { Router } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
 
@@ -47,7 +46,7 @@ export class NavbarComponent {
 
     logout() {
         return this.AuthService.logout().then(() => {
-            this.Router.navigateByUrl('/home');
+            this.Router.navigateByUrl('/login');
             this.reset();
         });
     }
