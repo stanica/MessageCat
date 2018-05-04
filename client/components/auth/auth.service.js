@@ -118,6 +118,7 @@ export class AuthService {
             })
             .then(_user => {
                 this.currentUser = _user;
+                localStorage.setItem('user', JSON.stringify(user));
                 return safeCb(callback)(null, _user);
             })
             .catch(err => {

@@ -7,6 +7,7 @@ var FileSchema = new mongoose.Schema({
   espIdac: Number,
   folder: String,
   fileName: String,
+  email: String,
   boot: { type: Boolean, default: 0 },
   active: { type: Boolean, default: true }
 });

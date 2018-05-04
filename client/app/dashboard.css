@@ -1510,11 +1510,10 @@ PANELS CONFIGURATIONS
 /* PROFILE PANELS */
 /* Profile 01*/
 #profile-01 {
-	background: url(../img/profile-01.jpg) no-repeat center top;
-	margin-top: -15px;
+	background: url(.../../assets/images/chip.png) no-repeat center top;
 	background-attachment: relative;
 	background-position: center center;
-	min-height: 150px;
+	min-height: 180px;
 	width: 100%;
     -webkit-background-size: 100%;
     -moz-background-size: 100%;

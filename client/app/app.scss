@@ -31,4 +31,12 @@ $fa-font-path: '/assets/fonts/font-awesome/';
   border-left: 5px solid #a94442; /* red */
 }
 
+.no-border-radius {
+	border-radius: 0 !important;
+}
+
+.buffer-top {
+	margin-top: 20px;
+}
+
 @import 'admin/admin.scss';

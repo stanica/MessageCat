@@ -1,15 +1,15 @@
-<aside *ngIf="Router.url != '/login'">
+<aside *ngIf="Router.url != '/login' && Router.url !== '/signup'">
   <div id="sidebar"  class="nav-collapse ">
       <!-- sidebar menu start-->
       <ul class="sidebar-menu" id="nav-accordion">
       
-          <p class="centered"><a href="profile.html"><img src="" class="img-circle" width="60"></a></p>
-          <h5 class="centered">Marcel Newman</h5>
+          <p class="centered"><img style="filter: invert(100%);" src="../../assets/images/lightbulb.png" class="img-circle" width="60"></p>
+          <h5 class="centered">{{currentUser.name}}</h5>
             
           <li class="mt">
-              <a routerLinkActive="active" routerLink="/home">
-                  <i class="fa fa-dashboard"></i>
-                  <span>Dashboard</span>
+              <a routerLinkActive="active" routerLink="/boards">
+                  <i class="fa fa-microchip"></i>
+                  <span>Boards</span>
               </a>
           </li>
 

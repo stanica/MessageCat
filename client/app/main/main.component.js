@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+import { AuthHttp } from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 import backstretch from 'jquery-backstretch';
 
@@ -11,23 +12,24 @@ import backstretch from 'jquery-backstretch';
 })
 export class MainComponent {
     Http;
-
-    awesomeThings = [];
+    boards = [];
     newThing = '';
+    AuthHttp;
 
-    static parameters = [Http];
-    constructor(http) {
+    static parameters = [Http, AuthHttp];
+    constructor(http, authHttp) {
         this.Http = http;
+        this.AuthHttp = authHttp;
         //TODO: Find a way to make this happen automatically
         $.backstretch('destroy');
     }
 
     ngOnInit() {
-        return this.Http.get('/api/things')
+        return this.AuthHttp.get('/api/esp')
             .map(res => res.json())
-            // .catch(err => Observable.throw(err.json().error || 'Server error'))
-            .subscribe(things => {
-                this.awesomeThings = things;
+            .subscribe(boards => {
+                console.log(boards);
+                this.boards = boards;
             });
     }
 

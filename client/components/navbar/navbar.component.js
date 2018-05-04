@@ -10,8 +10,8 @@ import { DataService } from '../data/data.service';
 export class NavbarComponent {
     isCollapsed = true;
     menu = [{
-        title: 'Home',
-        link: '/home',
+        title: 'Boards',
+        link: '/boards',
     }];
     Router;
     isAdmin;

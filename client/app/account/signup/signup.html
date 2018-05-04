@@ -1,3 +1,4 @@
+<!--
 <section id="main-content">
   <section class="wrapper site-min-height">
     <div class="row">
@@ -88,3 +89,85 @@
     <hr>
   </section>
 </section>
+-->
+
+<div id="signup-page">
+  <div class="container">
+      <form class="form-login" name="signupForm" (ngSubmit)="register(signupForm)" novalidate #signupForm="ngForm">
+        <h2 class="form-login-heading">sign up</h2>
+        <div class="login-wrap">
+          <input type="text" name="name" class="form-control" [(ngModel)]="user.name" placeholder="Name" required #name="ngModel">
+          <p class="help-block" [hidden]="name.valid || (name.pristine && !signupForm.submitted)">
+            A name is required
+          </p>
+          <br>
+          <input type="email" name="email" placeholder="Email" class="form-control" [(ngModel)]="user.email"
+              required
+              mongoose-error
+              #email="ngModel">
+          <p class="help-block" [hidden]="email.valid || (email.pristine && !signupForm.submitted) || (email.errors ? email.errors.inUse : true)">
+            Please enter a valid email address.
+          </p>
+          <p class="help-block" [hidden]="email.errors ? !email.errors.inUse : true">
+            This email address is already in use.
+          </p>
+          <br>
+          <input type="password" name="password" placeholder="Password" class="form-control" [(ngModel)]="user.password"
+              minlength="8"
+              maxlength="128"
+              required
+              mongoose-error
+              #password="ngModel"/>
+          <p class="help-block" [hidden]="password.valid || (password.pristine && !signupForm.submitted)">
+            Password must be between 8 and 128 characters.
+          </p>
+          <br>
+          <input type="password" name="confirmPassword" placeholder="Confirm password" class="form-control" [(ngModel)]="user.confirmPassword"
+              ac-match-control="password"
+              required
+              #confirmPassword="ngModel">
+          <br>
+          <button class="btn btn-theme02 btn-block" type="submit" [disabled]="!signupForm.form.valid || user.password !== user.confirmPassword">
+              <i class="fa fa-lock"></i> SIGN UP
+          </button>
+            <hr>
+            
+            <div class="login-social-link centered">
+            <p>or you can sign up via your social network</p>
+                <oauth-buttons classes="btn-block"></oauth-buttons>
+            </div>
+            <div class="registration">
+                Already have an account?<br/>
+                <a class="" routerLink="/login">
+                    Log in
+                </a>
+            </div>
+
+        </div>
+
+          <!-- Modal -->
+          <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                          <h4 class="modal-title">Forgot Password ?</h4>
+                      </div>
+                      <div class="modal-body">
+                          <p>Enter your e-mail address below to reset your password.</p>
+                          <input type="text" name="email" placeholder="Email" autocomplete="off" class="form-control placeholder-no-fix">
+
+                      </div>
+                      <div class="modal-footer">
+                          <button data-dismiss="modal" (click)="modal(0)" class="btn btn-default" type="button">Cancel</button>
+                          <button class="btn btn-theme" type="button">Submit</button>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- modal -->
+
+      </form>     
+  
+  </div>
+</div>

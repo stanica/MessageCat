@@ -7,6 +7,7 @@ var EspSchema = new mongoose.Schema({
   name: String,
   chipId: String,
   description: String,
+  email: String,
   update: { type: Number, default: 0 },
   heartbeat: Date,
   active: { type: Boolean, default: true },

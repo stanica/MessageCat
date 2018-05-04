@@ -33,19 +33,18 @@
 -->
 
 
-<header class="header black-bg" *ngIf="Router.url != '/login'">
+<header class="header black-bg" *ngIf="Router.url !== '/login' && Router.url !== '/signup'">
   <div class="sidebar-toggle-box" (click)="toggle()">
       <div class="fa fa-bars tooltips" data-placement="right" data-original-title="Toggle Navigation"></div>
   </div>
   <!--logo start-->
-  <a routerLink="/home" class="logo"><b>Message Cat</b></a>
+  <a routerLink="/boards" class="logo"><b>Message Cat</b></a>
   <!--logo end-->
   
   <div class="top-menu">
     <ul class="nav pull-right top-menu">
       <li [hidden]="isLoggedIn"><a class="signup" routerLink="/signup">Sign up</a></li>
       <li [hidden]="isLoggedIn" ><a class="login" routerLink="/login">Login</a></li>
-      <li [hidden]="!isLoggedIn"><p style="line-height:30px" class="navbar-text">Hello {{ currentUser.name }}</p> </li>
       <li [hidden]="!isLoggedIn"><a class="navbar-settings" routerLink="/settings"><span style="vertical-align:middle" class="glyphicon glyphicon-cog"></span></a></li>
       <li [hidden]="!isLoggedIn"><a style="cursor: pointer;" (click)="logout()" class="logout">Logout</a></li>
     </ul>

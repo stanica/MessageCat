@@ -10,7 +10,7 @@ import { MainComponent } from './main.component';
 
 
 export const ROUTES = [{
-    path: 'home',
+    path: 'boards',
     component: MainComponent,
     canActivate: [AuthGuard]
 }];

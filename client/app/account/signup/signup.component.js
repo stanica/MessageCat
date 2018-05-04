@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { AuthService } from '../../../components/auth/auth.service';
-
+import backstretch from 'jquery-backstretch';
 
 @Component({
     selector: 'signup',
@@ -24,6 +24,7 @@ export class SignupComponent {
     constructor(_AuthService_, router) {
         this.AuthService = _AuthService_;
         this.Router = router;
+        $.backstretch("../../assets/images/login.jpg", {transitionDuration: 500});
     }
 
     register(form) {
@@ -38,7 +39,8 @@ export class SignupComponent {
         })
             .then(() => {
                 // Account created, redirect to home
-                this.Router.navigateByUrl('/home');
+                $.backstretch("destroy");
+                this.Router.navigateByUrl('/boards');
             })
             .catch(err => {
                 this.errors = err.errors;

@@ -53,7 +53,7 @@ if(constants.env === 'development') {
 }
 
 const appRoutes = [{ path: '',
-    redirectTo: '/home',
+    redirectTo: '/boards',
     pathMatch: 'full'
 }];
 

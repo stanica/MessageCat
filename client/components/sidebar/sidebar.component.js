@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { DataService } from '../data/data.service';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
     selector: 'sidebar',
@@ -10,10 +11,14 @@ import { DataService } from '../data/data.service';
 export class SidebarComponent {
     isCollapsed = true;
     Router;
+    currentUser = {};
 
-    static parameters = [Router, DataService];
-    constructor(router, dataService) {
+    static parameters = [Router, DataService, AuthService];
+    constructor(router, dataService, AuthService) {
         this.Router = router;
+        AuthService.currentUserChanged.subscribe(user => {
+            this.currentUser = user;
+        });
 
         dataService.currentState.subscribe(collapse => {
             if(!collapse){

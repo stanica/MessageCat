@@ -63,9 +63,18 @@ function handleError(res, statusCode) {
 
 // Gets a list of Esps
 export function index(req, res) {
-  return Esp.find().exec()
+  console.log(req.user.email, req.user.role);
+  if(req.user.role === 'admin'){
+    return Esp.find().exec()
+      .then(respondWithResult(res))
+      .catch(handleError(res));
+  }
+  else {
+    return Esp.find({email:req.user.email}).exec()
+    .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
+  }
 }
 
 // Gets a single Esp from the DB

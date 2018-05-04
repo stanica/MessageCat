@@ -39,7 +39,7 @@ export class LoginComponent {
             .then(() => {
                 // Logged in, redirect to home
                 $.backstretch("destroy");
-                this.Router.navigateByUrl('/home');
+                this.Router.navigateByUrl('/boards');
             })
             .catch(err => {
                 console.log(err);
