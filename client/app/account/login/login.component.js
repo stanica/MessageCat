@@ -53,9 +53,11 @@ export class LoginComponent {
                 $("#myModal").addClass("in");
             }, 100);
             $("#myModal").css("display","block");
+            $('#page-cover').css('display','block');
         }
         else {
             $("#myModal").removeClass("in");
+            $('#page-cover').css('display','none');
             setTimeout(function(){
                 $("#myModal").css("display","none");
             }, 100)

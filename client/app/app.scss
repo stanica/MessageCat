@@ -39,4 +39,8 @@ $fa-font-path: '/assets/fonts/font-awesome/';
 	margin-top: 20px;
 }
 
+.animate {
+	transition: all 0.3s;
+}
+
 @import 'admin/admin.scss';

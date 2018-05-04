@@ -1,8 +1,9 @@
-<section id="main-content">
+<section id="main-content" class="animate">
   <section class="wrapper site-min-height">
     <div class="row">
       <div class="col-lg-12">
-        <h1 class="page-header">Managed Boards:</h1>
+        <h1 class="page-header">Managed Boards: <span class="pull-right"><button (click)="modal(1)" class="btn btn-success">New Board</button></span></h1>
+        <h2 *ngIf="boards.length == 0">You don't have any boards added. Click the 'New Board' button to add a new one.</h2>
         <div class="col-lg-4 col-md-4 col-sm-4 mb" *ngFor="let board of boards" style="height:100%">
           <div class="content-panel pn" style="padding:0; height: initial">
             <div id="profile-01">
@@ -12,11 +13,39 @@
             <div class="centered">
               <h6><i style="color:firebrick" class="fa fa-heart"></i> {{board.heartbeat | date: 'medium'}}</h6>
             </div>
-            <button type="button" class="no-border-radius btn btn-danger btn-block">Delete</button>
+            <button type="button" class="no-border-radius btn btn-warning btn-half-block" (click)="modal(1, board)">Edit</button>
+            <button type="button" class="no-border-radius btn btn-danger btn-half-block pull-right">Delete</button>
           </div>
         </div>
       </div>
-
     </div>
+    <!-- Modal -->
+      <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" (click)="modal(0)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">{{modalTitle}}</h4>
+              </div>
+              <form name="boardForm" (ngSubmit)="save(boardForm)" novalidate #boardForm="ngForm">
+                <div class="modal-body">
+                  <label for="name">Name</label>
+                  <input type="text" [(ngModel)]="board.name" name="name" placeholder="Enter the name of your board" autocomplete="off" class="form-control placeholder-no-fix" required>
+                  <br/>
+                  <label for="description">Description</label>
+                  <input type="text" [(ngModel)]="board.description" name="description" placeholder="Enter a short description of your board" autocomplete="off" class="form-control placeholder-no-fix" required>
+                  <br/>
+                  <label for="chipId">Chip Id</label>
+                  <input type="number" [(ngModel)]="board.chipId" name="chipId" placeholder="Enter the chip Id of your board" autocomplete="off" class="form-control placeholder-no-fix" required>
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" (click)="modal(0)" class="btn btn-default" type="button">Cancel</button>
+                    <button [disabled]="!boardForm.form.valid" class="btn btn-theme" type="button">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <!-- modal -->
   </section>
 </section>

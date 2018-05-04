@@ -13,8 +13,14 @@ import backstretch from 'jquery-backstretch';
 export class MainComponent {
     Http;
     boards = [];
-    newThing = '';
+    modalTitle;
     AuthHttp;
+    board = {
+        name: '',
+        description: '',
+        chipId: ''
+    };
+
 
     static parameters = [Http, AuthHttp];
     constructor(http, authHttp) {
@@ -33,6 +39,33 @@ export class MainComponent {
             });
     }
 
+    modal(state, board){
+        var that = this;
+        if(board){
+            this.modalTitle = 'Edit ' + board.name;
+            this.board = board;
+        }
+        else {
+            this.modalTitle = 'Add new board';
+            this.board = '';
+        }
+        if(state === 1){
+            setTimeout(function(){
+                $("#myModal").addClass("in");
+            }, 100);
+            $("#myModal").css("display","block");
+        }
+        else {
+            $("#myModal").removeClass("in");
+            setTimeout(function(){
+                $("#myModal").css("display","none");
+            }, 100)
+        }
+    }
+
+    save(form){
+        
+    }
 
     addThing() {
         if(this.newThing) {

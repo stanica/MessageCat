@@ -2558,3 +2558,11 @@ label {
 .navbar-settings {
     margin-top: 15px;
 }
+
+.btn-half-block {
+    width: 50%;
+}
+
+.modal {
+    background-color: rgba(0,0,0,0.8);
+}
