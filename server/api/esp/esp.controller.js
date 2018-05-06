@@ -12,6 +12,9 @@
 
 import { applyPatch } from 'fast-json-patch';
 import Esp from './esp.model';
+var fs = require('fs');
+var rimraf = require('rimraf');
+const path = require('path');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -39,7 +42,14 @@ function removeEntity(res) {
   return function(entity) {
     if(entity) {
       return entity.remove()
-        .then(() => res.status(204).end());
+        .then(() => {
+          if (typeof parseInt(entity.chipId) === 'number' && fs.existsSync(path.resolve('server/uploads/' + '/' + entity.chipId + '/'))){
+            rimraf(path.resolve('server/uploads/' + '/' + entity.chipId + '/'), function () {
+              console.log('Deleted ' + entity.chipId + '/');
+            });
+          }
+          res.status(204).end()
+        });
     }
   };
 }
@@ -63,7 +73,6 @@ function handleError(res, statusCode) {
 
 // Gets a list of Esps
 export function index(req, res) {
-  console.log(req.user.email, req.user.role);
   if(req.user.role === 'admin'){
     return Esp.find().exec()
       .then(respondWithResult(res))
@@ -88,7 +97,12 @@ export function show(req, res) {
 // Creates a new Esp in the DB
 export function create(req, res) {
   return Esp.create(req.body)
-    .then(respondWithResult(res, 201))
+    .then(esp => {
+      if (!fs.existsSync(path.resolve('server/uploads/' + '/' + esp.chipId + '/'))){
+        fs.mkdirSync(path.resolve('server/uploads/' + '/' + esp.chipId + '/'));
+      }
+      return respondWithResult(res, 201)(esp);
+    })
     .catch(handleError(res));
 }
 

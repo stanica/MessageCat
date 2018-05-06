@@ -15,7 +15,7 @@ export class AuthGuard {
     }
 
     canActivate() {
-        if(localStorage.getItem('user')) {
+        if(localStorage.getItem('user') && localStorage.getItem('id_token')) {
             return true;
         }
         else {

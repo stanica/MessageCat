@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import {registerEvents} from './file.events';
 
 var FileSchema = new mongoose.Schema({
-  espIdac: Number,
+  espId: mongoose.Schema.Types.ObjectId,
   folder: String,
   fileName: String,
   email: String,

@@ -1,0 +1,81 @@
+<section id="main-content" class="animate">
+  <section class="wrapper site-min-height">
+  	<div class="col-md-12" *ngIf="!id">
+	    <h1 class="page-header">Click a board to see its files</h1>
+	      <h2 *ngIf="boards.length == 0">You don't have any boards added. Click <a routerLink="/boards" [queryParams]="{new: true}">here</a> to add a new one.</h2>
+		<div class="row">
+		  	<div class="col-md-4 col-sm-4 mb" *ngFor="let board of boards">
+		  		<a routerLink="/files/{{board.chipId}}">
+					<div class="darkblue-panel pn">
+						<div class="darkblue-header">
+							<h5>{{board.name}}</h5>
+						</div>
+						<h1 class="mt"><i class="fa fa-folder fa-3x"></i></h1>
+						<footer>
+							<div class="centered">
+								<h5><i class="fa fa-file-text-o" style="margin-right:5px"></i> {{board.files && board.files.length}} file{{board.files && (board.files.length === 0 || board.files.length > 1) ? 's' : ''}}</h5>
+							</div>
+						</footer>
+					</div>
+				</a>
+		  	</div><!-- /col-md-4 -->
+	  	</div>
+ 	</div>
+ 	<div class="col-md-12" *ngIf="selectedBoard.name">
+		<div class="row mt">
+      		<div class="content-panel" style="padding: 15px 20px 5px 20px;">
+  				<h4><i class="fa fa-angle-right"></i> {{selectedBoard.name}} <span class="pull-right"><button style="margin-top:-6px" class="btn btn-success btn-sm" (click)="modal(1)"><i class="fa fa-plus"></i> New file</button></span></h4>
+  				<hr>
+              	<table style="border: 1px solid #dddddd;" class="table table-striped table-advance table-hover">
+              		<thead>
+                  		<tr>
+                      		<th><i class="fa fa-file-code-o"></i> File Name</th>
+	                      	<th class="hidden-phone"><i class="fa fa-power-off"></i> Bootable</th>
+	                      	<th></th>
+	                      	<th></th>
+	                  	</tr>
+                  	</thead>
+                  	<tbody>
+	                  	<tr *ngFor="let file of selectedBoard.files">
+	                      	<td>{{file.fileName}}</td>
+	                      	<td><span [ngClass]="{'label-success':file.boot, 'label-default': !file.boot}" class="label label-mini">{{file.boot ? 'True' : 'False'}}</span></td>
+	                      	<td>
+	                          	<button class="btn btn-primary btn-xs" (click)="edit(file)"><i class="fa fa-pencil"></i> Edit</button>
+	                      	</td>
+	                      	<td>
+	                          	<button class="btn btn-warning btn-xs" [disabled]="file.boot" (click)="setBoot(file)"><i class="fa fa-check"></i> Make bootable</button>
+	                          	<button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i> Delete</button>
+	                      	</td>
+	                  	</tr>
+                  	</tbody>
+              	</table>
+          	</div><!-- /content-panel -->
+      	</div><!-- /row -->
+
+      	<div class="row mt">
+			{{fileText}}
+      	</div>
+ 	</div>
+    <!-- Modal -->
+      <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                  <button type="button" class="close" (click)="modal(0)" data-dismiss="modal" aria-hidden="true">&times;</button>
+                  <h4 class="modal-title">{{modalTitle}}</h4>
+              </div>
+              <form name="boardForm" (ngSubmit)="save(boardForm)" novalidate #boardForm="ngForm">
+                <div class="modal-body">
+                  
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" (click)="modal(0)" class="btn btn-default" type="button">Cancel</button>
+                    <button [disabled]="!boardForm.form.valid" class="btn btn-theme" type="submit">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+      </div>
+      <!-- modal -->
+  </section>
+</section>

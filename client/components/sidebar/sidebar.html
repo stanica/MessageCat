@@ -3,26 +3,21 @@
       <!-- sidebar menu start-->
       <ul class="sidebar-menu" id="nav-accordion">
       
-          <p class="centered"><img style="filter: invert(100%);" src="../../assets/images/lightbulb.png" class="img-circle" width="60"></p>
-          <h5 class="centered">{{currentUser.name}}</h5>
+          <p class="centered"><img src="../../assets/images/lightbulb.png" class="img-circle user-image" width="70"></p>
+          <h4 class="centered">{{currentUser.name}}</h4>
             
           <li class="mt">
-              <a routerLinkActive="active" routerLink="/boards">
-                  <i class="fa fa-microchip"></i>
+              <a style="font-size:16px" routerLinkActive="active" routerLink="/boards">
+                  <i style="font-size:16px" class="fa fa-microchip"></i>
                   <span>Boards</span>
               </a>
           </li>
 
-          <li class="sub-menu">
-              <a href="javascript:;" >
-                  <i class="fa fa-desktop"></i>
-                  <span>UI Elements</span>
+          <li class="mt">
+              <a style="font-size:16px" routerLinkActive="active" routerLink="/files">
+                  <i style="font-size:16px" class="fa fa-file-text-o"></i>
+                  <span>Files</span>
               </a>
-              <ul class="sub">
-                  <li><a  href="general.html">General</a></li>
-                  <li><a  href="buttons.html">Buttons</a></li>
-                  <li><a  href="panels.html">Panels</a></li>
-              </ul>
           </li>
 
 

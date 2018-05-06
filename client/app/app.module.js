@@ -23,6 +23,13 @@ import { MainModule } from './main/main.module';
 import { DirectivesModule } from '../components/directives.module';
 import { AccountModule } from './account/account.module';
 import { AdminModule } from './admin/admin.module';
+import { FilesModule } from './files/files.module';
+
+import {
+  ToastrModule,
+  ToastNoAnimation,
+  ToastNoAnimationModule,
+} from 'ngx-toastr';
 
 import constants from './app.constants';
 
@@ -62,12 +69,16 @@ const appRoutes = [{ path: '',
     imports: [
         BrowserModule,
         HttpModule,
-
+        ToastNoAnimationModule,
+        ToastrModule.forRoot({
+          toastComponent: ToastNoAnimation,
+        }),
         RouterModule.forRoot(appRoutes, { enableTracing: /*process.env.NODE_ENV === 'development'*/ false }),
         MainModule,
         DirectivesModule,
         AccountModule,
         AdminModule,
+        FilesModule
     ],
     declarations: [
         AppComponent,

@@ -66,9 +66,17 @@ function handleError(res, statusCode) {
 
 // Gets a list of Files
 export function index(req, res) {
-  return File.find().exec()
+  if(req.user.role === 'admin'){
+    return File.find().exec()
+      .then(respondWithResult(res))
+      .catch(handleError(res));
+  }
+  else {
+    return File.find({email:req.user.email}).exec()
+    .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
+  }
 }
 
 // Gets a single File from the DB
@@ -79,12 +87,30 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
+//Sets boot flag for a file
+export function setBoot(req, res) {
+  File.find({folder: req.params.id, email: req.user.email}, function(err, files){
+    if(err) { return handleError(res, 500)(err); }
+    if(files.length === 0) { return handleEntityNotFound(res)(); }
+    for(var x=0; x<files.length; x++){
+      if(files[x].fileName === req.params.file){
+        files[x].boot = 1;
+      }
+      else {
+        files[x].boot = 0;
+      }
+      files[x].save();
+    }
+    return respondWithResult(res, 200)(files);
+  })
+}
+
 // Gets a list of files for a chip id
 export function list(req, res) {
   return Esp.findOne({'chipId':req.params.id}).exec()
     .then(handleEntityNotFound(res))
     .then(esp => {
-      return File.find({espId:esp.id}).sort({boot:-1}).exec(function(err, files){
+      return File.find({espId:esp._id}).sort({boot:-1}).exec(function(err, files){
         if(!files) {
          return res.status(404).end();
         }

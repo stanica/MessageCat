@@ -10,8 +10,7 @@ var EspSchema = new mongoose.Schema({
   email: String,
   update: { type: Number, default: 0 },
   heartbeat: Date,
-  active: { type: Boolean, default: true },
-  id: Number
+  active: { type: Boolean, default: true }
 });
 
 registerEvents(EspSchema);
