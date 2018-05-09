@@ -24,6 +24,7 @@ import { DirectivesModule } from '../components/directives.module';
 import { AccountModule } from './account/account.module';
 import { AdminModule } from './admin/admin.module';
 import { FilesModule } from './files/files.module';
+import { PlaygroundModule } from './playground/playground.module';
 
 import {
   ToastrModule,
@@ -78,7 +79,8 @@ const appRoutes = [{ path: '',
         DirectivesModule,
         AccountModule,
         AdminModule,
-        FilesModule
+        FilesModule,
+        PlaygroundModule
     ],
     declarations: [
         AppComponent,

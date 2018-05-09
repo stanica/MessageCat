@@ -22,7 +22,6 @@ function handleError(err) {
     //styles: [require('./files.scss')],
 })
 export class FilesComponent {
-    @ViewChild('fileName') fn
     Http;
     AuthHttp;
     toastr;
@@ -33,6 +32,7 @@ export class FilesComponent {
     Route;
     sub;
     id;
+    update
     fileText;
     logText;
     connected = false;
@@ -85,6 +85,7 @@ export class FilesComponent {
 
     ngOnDestroy() {
         this.sub.unsubscribe();
+        clearTimeout(this.update);
     }
 
     getLog(){
@@ -92,7 +93,7 @@ export class FilesComponent {
         that.AuthHttp.get('/api/files/' + this.selectedBoard.chipId + '/uploads/log.txt')
             .subscribe(file => {
                 that.logText = file._body;
-                setTimeout(function(){
+                that.update = setTimeout(function(){
                     that.getLog.call(that);
                 }, 4000);
             });

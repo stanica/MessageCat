@@ -64,10 +64,13 @@
 	      	</div>
 			<div class="col-md-5">
 				<div class="mt" *ngIf="logText">
-					<h4><i class="fa fa-angle-right"></i> Log</h4>
-					<pre class="terminal">
-						<div *ngFor="let line of logText.split('\n')">> {{line}}</div>
-					</pre>
+					<h4><i class="fa fa-angle-right"></i> log() output</h4>
+					<div class="shell-wrap">
+					  <p class="shell-top-bar">log.txt</p>
+					  <ul class="shell-body">
+					    <li *ngFor="let line of (logText[logText.length-1] === '\n' ? logText.substring(0,logText.length-1).split('\n') : logText.split('\n'))">{{line}}</li>
+					  </ul>
+					</div>
 				</div>
 			</div>
 		</div>

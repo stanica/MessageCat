@@ -353,7 +353,9 @@ module.exports = function makeWebpackConfig(options) {
         process: true,
         crypto: false,
         clearImmediate: false,
-        setImmediate: false
+        setImmediate: false,
+        fs: 'empty',
+        crypto: 'empty'
     };
 
     return config;
