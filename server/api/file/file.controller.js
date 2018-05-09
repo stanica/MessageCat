@@ -99,9 +99,19 @@ export function setBoot(req, res) {
       else {
         files[x].boot = 0;
       }
-      files[x].save();
+      files[x].save(function(err, saved){
+        if(err) { return handleError(res)(err); }
+      });
     }
-    return respondWithResult(res, 200)(files);
+    Esp.findOne({_id: files[0].espId}, function(err, esp){
+      if(err) { return handleError(res)(err); }
+      if(!esp) { return handleEntityNotFound(res)(); }
+      esp.update = 1;
+      esp.save(function(err, saved){
+        if(err) { return handleError(res)(err); }
+        return respondWithResult(res, 200)(files);
+      });
+    })
   })
 }
 
@@ -172,9 +182,21 @@ export function getUpdate(req, res) {
 
 // Creates a new File in the DB
 export function create(req, res) {
-  return File.create(req.body)
-    .then(respondWithResult(res, 201))
-    .catch(handleError(res));
+  if(req.body.fileName) {
+    return File.create(req.body)
+      .then(file => {
+        fs.writeFile(path.resolve('server/uploads/') + '/' + req.body.folder + '/' + req.body.fileName, "", function(err){
+          if(err){
+            console.log(err);
+          }
+          return respondWithResult(res, 201)(file);
+        });
+      })
+      .catch(handleError(res));
+  }
+  else {
+    return handleEntityNotFound(res)({});
+  }
 }
 
 // Upserts the given File in the DB at the specified ID
@@ -182,10 +204,22 @@ export function upsert(req, res) {
   if(req.body._id) {
     Reflect.deleteProperty(req.body, '_id');
   }
-  return File.findOneAndUpdate({_id: req.params.id}, req.body, {new: true, upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
-
-    .then(respondWithResult(res))
-    .catch(handleError(res));
+  fs.writeFile(path.resolve('server/uploads/') + '/' + req.body.folder + '/' + req.body.fileName, req.body.text, function(err){
+    if(err){
+      console.log(err);
+    }
+    else {
+      Esp.findOne({_id:req.body.espId}, function(err, esp){
+        if(err) { return handleError(res)(err); }
+        if(!esp) { return handleEntityNotFound(res)(); }
+        esp.update = 1;
+        esp.save(function(err, saved){
+          if(err) { return handleError(res)(err); }
+          respondWithResult(res, 201)({status:'success'});
+        });
+      });
+    }
+  })
 }
 
 // Updates an existing File in the DB
@@ -204,6 +238,25 @@ export function patch(req, res) {
 export function destroy(req, res) {
   return File.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
+    .then(file => {
+      fs.unlink(path.resolve('server/uploads') + '/' + file.folder + '/' + file.fileName, function(err){
+        return removeEntity(res)(file);
+      })
+    })
     .catch(handleError(res));
+}
+
+// Writes to a log file
+export function log(req, res) {
+  fs.access(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', "utf8", function(err){
+    if(err){
+      fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', req.body.text + '\n');
+    }
+    else {
+      var stream = fs.createWriteStream(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', {flags:'a'});
+      stream.write(req.body.text + '\n');
+      stream.end();
+    }
+  })
+  respondWithResult(res, 201)({status:'success'});
 }

@@ -30,7 +30,7 @@
               <form name="boardForm" (ngSubmit)="save(boardForm)" novalidate #boardForm="ngForm">
                 <div class="modal-body">
                   <label for="name">Name</label>
-                  <input type="text" [(ngModel)]="board.name" name="name" placeholder="Enter the name of your board" autocomplete="off" class="form-control placeholder-no-fix" required>
+                  <input type="text" [(ngModel)]="board.name" name="name" placeholder="Enter the name of your board" autocomplete="off" class="form-control placeholder-no-fix" autofocus required>
                   <br/>
                   <label for="description">Description</label>
                   <input type="text" [(ngModel)]="board.description" name="description" placeholder="Enter a short description of your board" autocomplete="off" class="form-control placeholder-no-fix" required>

@@ -6,7 +6,7 @@
 		<div class="row">
 		  	<div class="col-md-4 col-sm-4 mb" *ngFor="let board of boards">
 		  		<a routerLink="/files/{{board.chipId}}">
-					<div class="darkblue-panel pn">
+					<div class="darkblue-panel pn" style="cursor:pointer">
 						<div class="darkblue-header">
 							<h5>{{board.name}}</h5>
 						</div>
@@ -22,39 +22,55 @@
 	  	</div>
  	</div>
  	<div class="col-md-12" *ngIf="selectedBoard.name">
-		<div class="row mt">
+		<div class="mt">
       		<div class="content-panel" style="padding: 15px 20px 5px 20px;">
-  				<h4><i class="fa fa-angle-right"></i> {{selectedBoard.name}} <span class="pull-right"><button style="margin-top:-6px" class="btn btn-success btn-sm" (click)="modal(1)"><i class="fa fa-plus"></i> New file</button></span></h4>
+  				<h4><i class="fa fa-angle-right"></i> {{selectedBoard.name}} <span><button style="margin-top:-3px; line-height:0" class="btn btn-success btn-sm" (click)="modal(1)"><i class="fa fa-plus"></i> New file</button></span><span><a class="clickable" (click)="collapse('table')"><i [ngClass]="{'fa-window-minimize':!collapsedTable, 'fa-window-maximize':collapsedTable}" class="pull-right fa"></i></a></span></h4>
   				<hr>
-              	<table style="border: 1px solid #dddddd;" class="table table-striped table-advance table-hover">
-              		<thead>
-                  		<tr>
-                      		<th><i class="fa fa-file-code-o"></i> File Name</th>
-	                      	<th class="hidden-phone"><i class="fa fa-power-off"></i> Bootable</th>
-	                      	<th></th>
-	                      	<th></th>
-	                  	</tr>
-                  	</thead>
-                  	<tbody>
-	                  	<tr *ngFor="let file of selectedBoard.files">
-	                      	<td>{{file.fileName}}</td>
-	                      	<td><span [ngClass]="{'label-success':file.boot, 'label-default': !file.boot}" class="label label-mini">{{file.boot ? 'True' : 'False'}}</span></td>
-	                      	<td>
-	                          	<button class="btn btn-primary btn-xs" (click)="edit(file)"><i class="fa fa-pencil"></i> Edit</button>
-	                      	</td>
-	                      	<td>
-	                          	<button class="btn btn-warning btn-xs" [disabled]="file.boot" (click)="setBoot(file)"><i class="fa fa-check"></i> Make bootable</button>
-	                          	<button class="btn btn-danger btn-xs"><i class="fa fa-trash-o "></i> Delete</button>
-	                      	</td>
-	                  	</tr>
-                  	</tbody>
-              	</table>
+  				<div id="table" class="collapse in">
+	              	<table style="border: 1px solid #dddddd;" class="table table-striped table-advance table-hover">
+	              		<thead>
+	                  		<tr>
+	                      		<th><i class="fa fa-file-code-o"></i> File Name</th>
+		                      	<th class="hidden-phone"><i class="fa fa-power-off"></i> Bootable</th>
+		                      	<th></th>
+		                      	<th></th>
+		                  	</tr>
+	                  	</thead>
+	                  	<tbody>
+		                  	<tr *ngFor="let file of selectedBoard.files">
+		                      	<td>{{file.fileName}}</td>
+		                      	<td><span [ngClass]="{'label-success':file.boot, 'label-default': !file.boot}" class="label label-mini">{{file.boot ? 'True' : 'False'}}</span></td>
+		                      	<td>
+		                          	<button class="btn btn-primary btn-xs" (click)="edit(file)"><i class="fa fa-pencil"></i> Edit</button>
+		                      	</td>
+		                      	<td>
+		                          	<button class="btn btn-warning btn-xs" [disabled]="file.boot" (click)="setBoot(file)"><i class="fa fa-check"></i> Make bootable</button>
+		                          	<button class="btn btn-danger btn-xs" (click)="remove(file)"><i class="fa fa-trash-o "></i> Delete</button>
+		                      	</td>
+		                  	</tr>
+	                  	</tbody>
+	              	</table>
+              	</div>
           	</div><!-- /content-panel -->
       	</div><!-- /row -->
 
-      	<div class="row mt">
-			{{fileText}}
-      	</div>
+		<div class="row">
+			<div class="col-md-7">
+		      	<div *ngIf="selectedFile && selectedFile.fileName" class="mt">
+		      		<h4><i class="fa fa-angle-right"></i> {{selectedFile.fileName}}</h4>
+					<ace-editor id="editor" class="content-panel" [options]="options" mode="lua" theme="xcode" [(text)]="fileText" #editor style="min-height:300px;"></ace-editor>
+					<span><button class="btn btn-success buffer-top" (click)="save()"><i class="fa fa-floppy-o "></i>&nbsp;&nbsp;Save and upload</button></span>
+		      	</div>
+	      	</div>
+			<div class="col-md-5">
+				<div class="mt" *ngIf="logText">
+					<h4><i class="fa fa-angle-right"></i> Log</h4>
+					<pre class="terminal">
+						<div *ngFor="let line of logText.split('\n')">> {{line}}</div>
+					</pre>
+				</div>
+			</div>
+		</div>
  	</div>
     <!-- Modal -->
       <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal" class="modal fade">
@@ -64,13 +80,15 @@
                   <button type="button" class="close" (click)="modal(0)" data-dismiss="modal" aria-hidden="true">&times;</button>
                   <h4 class="modal-title">{{modalTitle}}</h4>
               </div>
-              <form name="boardForm" (ngSubmit)="save(boardForm)" novalidate #boardForm="ngForm">
+              <form name="fileForm" (ngSubmit)="create(fileForm)" novalidate #fileForm="ngForm">
                 <div class="modal-body">
-                  
+                  <label for="name">Name</label>
+                  <input type="text" [(ngModel)]="file.fileName" name="fileName" placeholder="Enter the name of your new file" autocomplete="off" class="form-control placeholder-no-fix" #fileName autofocus required>
+                  <br/>
                 </div>
                 <div class="modal-footer">
                     <button data-dismiss="modal" (click)="modal(0)" class="btn btn-default" type="button">Cancel</button>
-                    <button [disabled]="!boardForm.form.valid" class="btn btn-theme" type="submit">Submit</button>
+                    <button [disabled]="!fileForm.form.valid" class="btn btn-theme" type="submit">Submit</button>
                 </div>
               </form>
             </div>

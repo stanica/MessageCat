@@ -13,6 +13,7 @@ router.get('/:id/update', controller.getUpdate);
 router.get('/:id/uploads/:file', controller.getFile);
 router.get('/:id/boot/:file', auth.isAuthenticated(), controller.setBoot);
 router.post('/', controller.create);
+router.post('/:id/log', controller.log);
 router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);
 router.delete('/:id', controller.destroy);
