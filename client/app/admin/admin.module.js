@@ -3,12 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '../../components/auth/auth-guard.service';
 import { AuthModule } from '../../components/auth/auth.module';
-import { AdminComponent } from './admin.component';
+import { AdminUsersComponent } from './admin.component';
+import { AdminLearningComponent } from './learning.component';
 
 
 const adminRoutes = [{
-    path: 'admin',
-    component: AdminComponent,
+    path: 'admin/users',
+    component: AdminUsersComponent,
+    canActivate: [AuthGuard],
+}, {
+    path: 'admin/learning',
+    component: AdminLearningComponent,
     canActivate: [AuthGuard],
 }];
 
@@ -20,10 +25,12 @@ const adminRoutes = [{
 
     ],
     declarations: [
-        AdminComponent,
+        AdminUsersComponent,
+        AdminLearningComponent
     ],
     exports: [
-        AdminComponent,
+        AdminUsersComponent,
+        AdminLearningComponent
     ],
 })
 export class AdminModule {}

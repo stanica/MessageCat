@@ -6,28 +6,63 @@
           <p class="centered"><img src="../../assets/images/cat.png" class="jiggle" width="100"></p>
           <h4 class="centered">{{currentUser.name}}</h4>
             
+          <li  class="mt">
+              
+          </li>
+
+          <li [hidden]="!isAdmin" class="mt sub-menu">
+            <a href="javascript:;" >
+                <i class="fa fa-superpowers"></i>
+                <span>Admin</span>
+            </a>
+            <ul class="sub">
+                <li>
+                  <a routerLinkActive="active" routerLink="/admin/learning">
+                    <i class="fa fa-graduation-cap"></i>
+                    <span>Learning</span>
+                  </a>
+                </li>
+                <li>
+                  <a routerLinkActive="active" routerLink="/admin/users">
+                    <i class="fa fa-users"></i>
+                    <span>Users</span>
+                  </a>
+                </li>
+            </ul>
+          </li>
+
           <li class="mt">
-              <a style="font-size:16px" routerLinkActive="active" routerLink="/boards">
-                  <i style="font-size:16px" class="fa fa-microchip"></i>
+              <a routerLinkActive="active" routerLink="/boards">
+                  <i class="fa fa-microchip"></i>
                   <span>Boards</span>
               </a>
           </li>
 
           <li class="mt">
-              <a style="font-size:16px" routerLinkActive="active" routerLink="/files">
-                  <i style="font-size:16px" class="fa fa-file-text-o"></i>
+              <a routerLinkActive="active" routerLink="/files">
+                  <i class="fa fa-file-text-o"></i>
                   <span>Files</span>
               </a>
           </li>
 
           <li class="mt">
-              <a style="font-size:16px" routerLinkActive="active" routerLink="/playground">
-                  <i style="font-size:16px" class="fa fa-terminal"></i>
+              <a routerLinkActive="active" routerLink="/playground">
+                  <i class="fa fa-terminal"></i>
                   <span>Playground</span>
               </a>
           </li>
 
-
+          <li class="mt sub-menu">
+            <a href="javascript:;" >
+                <i class="fa fa-graduation-cap"></i>
+                <span>Learning</span>
+            </a>
+            <ul class="sub">
+                <li><a  href="blank.html">Blank Page</a></li>
+                <li><a  href="login.html">Login</a></li>
+                <li><a  href="lock_screen.html">Lock Screen</a></li>
+            </ul>
+          </li>
       </ul>
       <!-- sidebar menu end-->
   </div>
