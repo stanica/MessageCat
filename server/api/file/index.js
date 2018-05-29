@@ -17,5 +17,6 @@ router.post('/:id/log', controller.log);
 router.put('/:id', controller.upsert);
 router.patch('/:id', controller.patch);
 router.delete('/:id', controller.destroy);
+router.delete('/:id/log', auth.isAuthenticated(), controller.destroyLog);
 
 module.exports = router;

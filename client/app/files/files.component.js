@@ -22,6 +22,7 @@ function handleError(err) {
     //styles: [require('./files.scss')],
 })
 export class FilesComponent {
+    @ViewChild('fileName') fn
     Http;
     AuthHttp;
     toastr;
@@ -84,7 +85,9 @@ export class FilesComponent {
     }
 
     ngOnDestroy() {
-        this.sub.unsubscribe();
+        if(this.sub){
+            this.sub.unsubscribe();
+        }
         clearTimeout(this.update);
     }
 
@@ -96,6 +99,8 @@ export class FilesComponent {
                 that.update = setTimeout(function(){
                     that.getLog.call(that);
                 }, 4000);
+            }, err => {
+                console.log(err); 
             });
     }
 
@@ -188,6 +193,18 @@ export class FilesComponent {
                 .subscribe(() => {
                     this.selectedBoard.files.splice(this.selectedBoard.files.indexOf(file), 1);
                     this.toastr.success('You deleted ' + file.fileName);
+                });
+        }
+    }
+
+    removeLog(){
+        if(confirm('Are you sure you want to delete the log? Make sure you\'ve downloaded the file first!')){
+            return this.AuthHttp.delete('/api/files/' + this.selectedBoard.chipId + '/log')
+                .map(res => res.json())
+                .catch(err => Observable.throw(err.json().error || 'Server error'))
+                .subscribe(() => {
+                    this.toastr.success('You deleted the log!');
+                    this.logText = '';
                 });
         }
     }

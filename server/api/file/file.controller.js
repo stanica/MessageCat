@@ -15,6 +15,7 @@ import File from './file.model';
 import Esp from '../esp/esp.model';
 const fs = require('fs');
 const path = require('path');
+const readLastLines = require('read-last-lines');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -147,13 +148,30 @@ export function list(req, res) {
 export function getFile(req, res) {
   fs.readFile(path.resolve('server/uploads/') + '/' + req.params.id + '/' + req.params.file, "utf8", function(err, data){
     if(!err){
-      res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
-      res.write(data);
-      res.end();
-      //return respondWithResult(res, 200)(data);
+      if(req.params.file === 'log.txt'){
+        readLastLines.read(path.resolve('server/uploads/') + '/' + req.params.id + '/' + req.params.file, 50)
+          .then((lines) => {
+            res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+            res.write(lines);
+            res.end();
+          });
+      }
+      else {
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+        res.write(data);
+        res.end();
+      }
     }
     else {
-      return handleError(res)(err);
+      if(req.params.file === 'log.txt'){
+        fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt',"");
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
+        res.write("");
+        res.end();
+      }
+      else {
+        return handleError(res)(err);
+      }
     }
   });
 }
@@ -236,14 +254,33 @@ export function patch(req, res) {
 
 // Deletes a File from the DB
 export function destroy(req, res) {
-  return File.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(file => {
-      fs.unlink(path.resolve('server/uploads') + '/' + file.folder + '/' + file.fileName, function(err){
-        return removeEntity(res)(file);
+  if(req.params.id){
+    return File.findById(req.params.id).exec()
+      .then(handleEntityNotFound(res))
+      .then(file => {
+        fs.unlink(path.resolve('server/uploads') + '/' + file.folder + '/' + file.fileName, function(err){
+          return removeEntity(res)(file);
+        })
       })
-    })
-    .catch(handleError(res));
+      .catch(handleError(res));
+  }
+  else {
+    
+  }
+}
+
+// Deletes log files
+export function destroyLog(req, res) {
+  if(req.params.id){
+    return Esp.findOne({'chipId':req.params.id, 'email': req.user.email}).exec()
+      .then(handleEntityNotFound(res))
+      .then(esp => {
+        fs.unlink(path.resolve('server/uploads') + '/' + esp.chipId + '/log.txt', function(err){
+          respondWithResult(res, 201)({status:'success'});
+        })
+      })
+      .catch(handleError(res));
+  }
 }
 
 // Writes to a log file

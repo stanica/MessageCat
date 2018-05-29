@@ -1,9 +1,9 @@
-print('Hello world')
+
 -- Blink using timer alarm --
 timerId = 0
-dly = 1000
+dly = 100
 -- use D4
-ledPin = 4
+ledPin = 3
 -- set mode to output
 gpio.mode(ledPin,gpio.OUTPUT)
 ledState = 0

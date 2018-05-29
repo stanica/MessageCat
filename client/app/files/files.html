@@ -34,6 +34,7 @@
 		                      	<th class="hidden-phone"><i class="fa fa-power-off"></i> Bootable</th>
 		                      	<th></th>
 		                      	<th></th>
+		                      	<th></th>
 		                  	</tr>
 	                  	</thead>
 	                  	<tbody>
@@ -47,6 +48,7 @@
 		                          	<button class="btn btn-warning btn-xs" [disabled]="file.boot" (click)="setBoot(file)"><i class="fa fa-check"></i> Make bootable</button>
 		                          	<button class="btn btn-danger btn-xs" (click)="remove(file)"><i class="fa fa-trash-o "></i> Delete</button>
 		                      	</td>
+		                      	<td><a class="btn btn-info btn-xs" href="/api/files/{{file.folder}}/uploads/{{file.fileName}}" download><i class="fa fa-download"></i> Download</a></td>
 		                  	</tr>
 	                  	</tbody>
 	              	</table>
@@ -59,18 +61,19 @@
 		      	<div *ngIf="selectedFile && selectedFile.fileName" class="mt">
 		      		<h4><i class="fa fa-angle-right"></i> {{selectedFile.fileName}}</h4>
 					<ace-editor id="editor" class="content-panel" [options]="options" mode="lua" theme="xcode" [(text)]="fileText" #editor style="min-height:300px;"></ace-editor>
-					<span><button class="btn btn-success buffer-top" (click)="save()"><i class="fa fa-floppy-o "></i>&nbsp;&nbsp;Save and upload</button></span>
+					<button class="btn btn-success buffer-top" (click)="save()"><i class="fa fa-floppy-o"></i>&nbsp;&nbsp;Save and upload</button>
 		      	</div>
 	      	</div>
 			<div class="col-md-5">
 				<div class="mt" *ngIf="logText">
-					<h4><i class="fa fa-angle-right"></i> log() output</h4>
+					<h4><i class="fa fa-angle-right"></i> Log - last 50 lines</h4>
 					<div class="shell-wrap">
 					  <p class="shell-top-bar">log.txt</p>
 					  <ul class="shell-body">
 					    <li *ngFor="let line of (logText[logText.length-1] === '\n' ? logText.substring(0,logText.length-1).split('\n') : logText.split('\n'))">{{line}}</li>
 					  </ul>
 					</div>
+					<a class="btn btn-info buffer-top" href="/api/files/{{selectedBoard.chipId}}/uploads/log.txt" download><i class="fa fa-download"></i>&nbsp;&nbsp;Download log</a>&nbsp;&nbsp;<button class="btn btn-danger buffer-top" (click)="removeLog()"><i class="fa fa-trash-o"></i>&nbsp;&nbsp;Delete log</button>
 				</div>
 			</div>
 		</div>

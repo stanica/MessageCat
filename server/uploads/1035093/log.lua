@@ -16,7 +16,6 @@ LoadX()
 
 function log(text)
     if(processing) then
-        print("inserting")
         table.insert(logs, 1, text)
     else
         if(#logs == 0) then
@@ -36,7 +35,6 @@ function process()
         if (code < 0) then
             print("HTTP request failed")
         end
-        print("logs size", #logs)
         if(#logs ~= 0) then
             process()
         else
