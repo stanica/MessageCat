@@ -170,7 +170,12 @@ UserSchema.methods = {
 
         this.encryptPassword(password, (err, pwdGen) => {
             if(err) {
+              if(this.facebook.id){
+                return callback({message:'You previously signed up with a Facebook account. Click the Facebook button to log in.'});
+              }
+              else {
                 return callback(err);
+              }
             }
 
             if(this.password === pwdGen) {

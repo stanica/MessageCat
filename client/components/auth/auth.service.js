@@ -14,6 +14,22 @@ class User {
     $promise = undefined;
 }
 
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 @Injectable()
 export class AuthService {
     _currentUser = new User();
@@ -28,7 +44,7 @@ export class AuthService {
         this.Http = http;
         this.AuthHttp = authHttp;
         this.UserService = userService;
-
+        var token = getCookie('token');
         if(localStorage.getItem('id_token')) {
             this.UserService.get().toPromise()
                 .then(user => {
@@ -40,6 +56,9 @@ export class AuthService {
 
                     localStorage.removeItem('id_token');
                 });
+        }
+        else if(token){
+            this.setSessionToken();
         }
     }
 
@@ -100,6 +119,7 @@ export class AuthService {
         localStorage.removeItem('user');
         localStorage.removeItem('id_token');
         this.currentUser = new User();
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         return Promise.resolve();
     }
 
@@ -207,5 +227,24 @@ export class AuthService {
      */
     getToken() {
         return localStorage.getItem('id_token');
+    }
+
+    getTokenCookie() {
+        return getCookie('token');
+    }
+
+    setSessionToken() {
+        var token = getCookie('token');
+        localStorage.setItem('id_token', token);
+        this.UserService.get().toPromise()
+            .then(user => {
+                localStorage.setItem('user', JSON.stringify(user));
+                this.currentUser = user;
+                this.currentUserChanged.emit(user);
+            })
+            .catch(err => {
+                console.log(err);
+                this.logout();
+            });
     }
 }
