@@ -287,7 +287,11 @@ export function destroyLog(req, res) {
 export function log(req, res) {
   fs.access(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', "utf8", function(err){
     if(err){
-      fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', req.body.text + '\n');
+      fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', req.body.text + '\n', function(err){
+        if(err){
+          console.log('Error writing to log.txt',err);
+        }
+      });
     }
     else {
       var stream = fs.createWriteStream(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', {flags:'a'});
