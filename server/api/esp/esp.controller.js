@@ -67,6 +67,7 @@ function handleEntityNotFound(res) {
 function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
+    console.log('>>>',err);
     res.status(statusCode).send(err);
   };
 }
@@ -99,8 +100,18 @@ export function create(req, res) {
   return Esp.create(req.body)
     .then(esp => {
       if (!fs.existsSync(path.resolve('server/uploads/') + '/' + esp.chipId + '/')){
-        fs.mkdirSync(path.resolve('server/uploads/') + '/' + esp.chipId + '/');
-        fs.writeFile(path.resolve('server/uploads/') + '/' + esp.chipId + '/log.txt',"");
+        fs.mkdir(path.resolve('server/uploads/') + '/' + esp.chipId + '/', function(err){
+          if(err){
+            console.log('Error making folder for ' + esp.chipId, err);
+            return handleError(res)(err);
+          }
+          fs.writeFile(path.resolve('server/uploads/') + '/' + esp.chipId + '/log.txt',"", function(err){
+            if(err){
+              console.log('Error writing log.txt', err);
+              return handleError(res)(err);
+            }
+          });
+        });
       }
       return respondWithResult(res, 201)(esp);
     })
