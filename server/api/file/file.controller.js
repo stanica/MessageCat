@@ -164,7 +164,12 @@ export function getFile(req, res) {
     }
     else {
       if(req.params.file === 'log.txt'){
-        fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt',"");
+        fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt',"", function(err){
+          if(err){
+            console.log('Error writing log.txt', err);
+            return handleError(res)(err);
+          }
+        });
         res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': 0});
         res.write("");
         res.end();
