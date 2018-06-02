@@ -99,7 +99,7 @@ export function create(req, res) {
   return Esp.create(req.body)
     .then(esp => {
       if (!fs.existsSync(path.resolve('server/uploads/') + '/' + esp.chipId + '/')){
-        fs.mkdir(path.resolve('server/uploads/') + '/' + esp.chipId + '/', function(err){
+        fs.mkdir(path.resolve('server/uploads/') + '/' + esp.chipId, function(err){
           if(err){
             console.log('Error making folder for ' + esp.chipId, err);
             return handleError(res)(err);
