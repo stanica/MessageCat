@@ -100,6 +100,7 @@ export function create(req, res) {
     .then(esp => {
       if (!fs.existsSync(path.resolve('server/uploads/' + '/' + esp.chipId + '/'))){
         fs.mkdirSync(path.resolve('server/uploads/' + '/' + esp.chipId + '/'));
+        fs.writeFile(path.resolve('server/uploads/') + '/' + esp.chipId + '/log.txt',"");
       }
       return respondWithResult(res, 201)(esp);
     })
