@@ -135,7 +135,7 @@ export function list(req, res) {
           }
         }
         result = result.trim();
-        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Cache-Control':'no-transform'});
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': Buffer.byteLength(result)});
         res.write(result);
         res.end();
         //respondWithResult(res, 200)(result);
@@ -151,13 +151,13 @@ export function getFile(req, res) {
       if(req.params.file === 'log.txt'){
         readLastLines.read(path.resolve('server/uploads/') + '/' + req.params.id + '/' + req.params.file, 50)
           .then((lines) => {
-            res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Cache-Control':'no-transform'});
+            res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': Buffer.byteLength(lines)});
             res.write(lines);
             res.end();
           });
       }
       else {
-        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Cache-Control':'no-transform'});
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': Buffer.byteLength(data.toString())});
         res.write(data);
         res.end();
       }
@@ -165,7 +165,7 @@ export function getFile(req, res) {
     else {
       if(req.params.file === 'log.txt'){
         fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt',"");
-        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Cache-Control':'no-transform'});
+        res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': 0});
         res.write("");
         res.end();
       }
@@ -184,7 +184,7 @@ export function getUpdate(req, res) {
       if(err){
         return handleError(res)(err);
       }
-      res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Cache-Control':'no-transform'});
+      res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity'});
       if(esp.update === 1){
         res.write('UPDATE');
         esp.update = 0;
