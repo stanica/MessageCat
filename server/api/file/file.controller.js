@@ -104,7 +104,7 @@ export function setBoot(req, res) {
         if(err) { return handleError(res)(err); }
       });
     }
-    Esp.findOne({_id: files[0].espId}, function(err, esp){
+    Esp.findOne({_id: files[files.length-1].espId}, function(err, esp){
       if(err) { return handleError(res)(err); }
       if(!esp) { return handleEntityNotFound(res)(); }
       esp.update = 1;
