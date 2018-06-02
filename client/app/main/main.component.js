@@ -100,7 +100,6 @@ export class MainComponent {
                 },
                 err => {
                     this.toastr.error('Oh no! Something went wrong');
-                    console.log(err);
                     return handleError(err);
                 })
         }
@@ -116,7 +115,6 @@ export class MainComponent {
                 },
                 err => {
                     this.toastr.error('Oh no! Something went wrong');
-                    console.log(err);
                     return handleError();
                 })
         }
