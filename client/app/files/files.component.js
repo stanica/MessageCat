@@ -177,7 +177,7 @@ export class FilesComponent {
         var annotations = this.editor.getSession().getAnnotations();
         for(var x=0; x<annotations.length; x++){
             if(annotations[x].type === 'error'){
-                alert('There\'s a problem with your code on line ' + annotations[x].row + '. Try fixing it before saving.');
+                alert('There\'s a problem with your code on line ' + (annotations[x].row + 1) + '. Try fixing it before saving.');
                 return;
             }
         }
