@@ -33,6 +33,7 @@ export class FilesComponent {
     Route;
     sub;
     id;
+    editor;
     update
     fileText;
     logText;
@@ -121,8 +122,8 @@ export class FilesComponent {
         this.AuthHttp.get('/api/files/' + file.folder + '/uploads/' + file.fileName)
             .subscribe(file => {
                 this.fileText = file._body;
-                var editor = ace.edit('editor');
-                editor.focus();
+                this.editor = ace.edit('editor');
+                this.editor.focus();
             });
     }
 
@@ -173,6 +174,13 @@ export class FilesComponent {
     }
 
     save(){
+        var annotations = this.editor.getSession().getAnnotations();
+        for(var x=0; x<annotations.length; x++){
+            if(annotations[x].type === 'error'){
+                alert('There\'s a problem with your code on line ' + annotations[x].row + '. Try fixing it before saving.');
+                return;
+            }
+        }
         var wordsList = ['Hooray', 'Fantabulous', 'Rad', 'Fantastic', 'Gnarly', 'Rad', 'Yipee', 'Sweet'];
         this.selectedFile.text = this.fileText;
         return this.AuthHttp.put('/api/files/' + this.selectedFile._id, this.selectedFile)

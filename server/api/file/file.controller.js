@@ -16,6 +16,7 @@ import Esp from '../esp/esp.model';
 const fs = require('fs');
 const path = require('path');
 const readLastLines = require('read-last-lines');
+const luamin = require('luamin');
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -157,6 +158,9 @@ export function getFile(req, res) {
           });
       }
       else {
+        if(req.query.min === 'true'){
+          data = luamin.minify(data);
+        }
         res.writeHead(200, {'Content-Type':'text/json','Transfer-Encoding':'Identity', 'Content-Length': Buffer.byteLength(data.toString())});
         res.write(data);
         res.end();
