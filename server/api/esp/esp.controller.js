@@ -12,6 +12,8 @@
 
 import { applyPatch } from 'fast-json-patch';
 import Esp from './esp.model';
+
+const https = require('https');
 var fs = require('fs');
 var rimraf = require('rimraf');
 const path = require('path');
@@ -146,4 +148,26 @@ export function destroy(req, res) {
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
+}
+
+// Get Instagram followers for a username
+export function getFollowers(req, res){
+  https.get('https://www.instagram.com/web/search/topsearch/?query=' + req.params.id, (resp) => {
+    let data = '';
+   
+    // A chunk of data has been recieved.
+    resp.on('data', (chunk) => {
+      data += chunk;
+    });
+   
+    // The whole response has been received. Print out the result.
+    resp.on('end', () => {
+      console.log(JSON.parse(data).users[0]);
+      return respondWithResult(res)(JSON.parse(data).users[0].user);
+    });
+   
+  }).on("error", (err) => {
+    console.log("Error: " + err.message);
+    return handleError(res)(err);
+  });
 }
