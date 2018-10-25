@@ -23,7 +23,9 @@ mongoose.connection.on('error', function(err) {
 });
 
 // Setup server
+var bodyParser = require('body-parser');
 var app = express();
+app.use(bodyParser.text());
 var server = http.createServer(app);
 
 expressConfig(app);

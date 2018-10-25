@@ -294,6 +294,7 @@ export function destroyLog(req, res) {
 
 // Writes to a log file
 export function log(req, res) {
+  req.body = JSON.parse(req.body);
   fs.access(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', "utf8", function(err){
     if(err){
       fs.writeFile(path.resolve('server/uploads/') + '/' + req.params.id + '/log.txt', req.body.text + '\n', function(err){
